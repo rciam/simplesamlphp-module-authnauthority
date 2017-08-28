@@ -28,6 +28,8 @@ Example configuration for the authproc filter in global `config/config.php`:
         // By default we replace the existing attribute value (if any);
         // change to false to append the AuthenticatingAuthority values
         //'replace' => true,
+        // List of SP entity IDs that should be excluded
+        //'spBlacklist' => array(),
       ),
 
 ## License
