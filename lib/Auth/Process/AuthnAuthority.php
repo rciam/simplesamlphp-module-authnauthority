@@ -28,6 +28,8 @@
  *            // By default we replace the existing attribute value (if any);
  *            // change to false to append the AuthenticatingAuthority values
  *            //'replace' => true,
+ *            // List of SP entity IDs that should be excluded
+ *            //'spBlacklist' => array(),
  *       ),
  *
  * @author Nicolas Liampotis <nliam@grnet.gr>
@@ -37,6 +39,9 @@ class sspmod_authnauthority_Auth_Process_AuthnAuthority extends SimpleSAML_Auth_
     private $attribute = 'authnAuthority';
 
     private $replace = true;
+
+    // List of SP entity IDs that should be excluded from this filter.
+    private $spBlacklist = array();
 
     public function __construct($config, $reserved)
     {
@@ -62,12 +67,30 @@ class sspmod_authnauthority_Auth_Process_AuthnAuthority extends SimpleSAML_Auth_
             }
             $this->replace = $config['replace']; 
         }
+
+        if (array_key_exists('spBlacklist', $config)) {
+            if (!is_array($config['spBlacklist'])) {
+                SimpleSAML_Logger::error(
+                    "[authnauthority] Configuration error: 'spBlacklist' not an array");
+                throw new SimpleSAML_Error_Exception(
+                    "authnauthority configuration error: 'spBlacklist' not an array");
+            }
+            $this->spBlacklist = $config['spBlacklist'];
+        }
     }
 
     public function process(&$state)
     {
         assert('is_array($state)');
-	    
+
+        if (!empty($state['saml:sp:State']['SPMetadata']['entityid'])
+            && in_array($state['saml:sp:State']['SPMetadata']['entityid'], $this->spBlacklist, true)) {
+            SimpleSAML_Logger::debug(
+                "[authnauthority] process: Blacklisted SP "
+                . var_export($state['saml:sp:State']['SPMetadata']['entityid'], true)
+                . " - Skipping...");
+            return;
+        }
         if (empty($state['saml:sp:State']['saml:AuthenticatingAuthority'])) {
             SimpleSAML_Logger::debug(
                 "[authnauthority] process: 'saml:AuthenticatingAuthority' not available - Skipping...");
