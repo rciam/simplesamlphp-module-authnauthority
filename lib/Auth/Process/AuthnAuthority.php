@@ -1,5 +1,7 @@
 <?php
 
+namespace SimpleSAML\Module\authnauthority\Auth\Process;
+
 /**
  * authproc filter for generating an attribute with the value(s) of the
  * <AuthenticatingAuthority> element contained in a SAML response. 
@@ -34,7 +36,7 @@
  *
  * @author Nicolas Liampotis <nliam@grnet.gr>
  */
-class sspmod_authnauthority_Auth_Process_AuthnAuthority extends SimpleSAML_Auth_ProcessingFilter
+class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
 {
     private $attribute = 'authnAuthority';
 
