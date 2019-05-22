@@ -2,6 +2,9 @@
 
 namespace SimpleSAML\Module\authnauthority\Auth\Process;
 
+use SimpleSAML\Error\Exception;
+use SimpleSAML\Logger;
+
 /**
  * authproc filter for generating an attribute with the value(s) of the
  * <AuthenticatingAuthority> element contained in a SAML response. 
@@ -52,9 +55,9 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
 
         if (array_key_exists('attribute', $config)) {
             if (!is_string($config['attribute'])) {
-                SimpleSAML_Logger::error(
+                Logger::error(
                     "[authnauthority] Configuration error: 'attribute' not a string literal");
-                throw new SimpleSAML_Error_Exception(
+                throw new Exception(
                     "authnauthority configuration error: 'attribute' not a string literal");
             }
             $this->attribute = $config['attribute']; 
@@ -62,9 +65,9 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
 
         if (array_key_exists('replace', $config)) {
             if (!is_bool($config['replace'])) {
-                SimpleSAML_Logger::error(
+                Logger::error(
                     "[authnauthority] Configuration error: 'replace' not a boolean");
-                throw new SimpleSAML_Error_Exception(
+                throw new Exception(
                     "authnauthority configuration error: 'replace' not a boolean");
             }
             $this->replace = $config['replace']; 
@@ -72,9 +75,9 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
 
         if (array_key_exists('spBlacklist', $config)) {
             if (!is_array($config['spBlacklist'])) {
-                SimpleSAML_Logger::error(
+                Logger::error(
                     "[authnauthority] Configuration error: 'spBlacklist' not an array");
-                throw new SimpleSAML_Error_Exception(
+                throw new Exception(
                     "authnauthority configuration error: 'spBlacklist' not an array");
             }
             $this->spBlacklist = $config['spBlacklist'];
@@ -87,19 +90,19 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
 
         if (!empty($state['saml:sp:State']['SPMetadata']['entityid'])
             && in_array($state['saml:sp:State']['SPMetadata']['entityid'], $this->spBlacklist, true)) {
-            SimpleSAML_Logger::debug(
+            Logger::debug(
                 "[authnauthority] process: Blacklisted SP "
                 . var_export($state['saml:sp:State']['SPMetadata']['entityid'], true)
                 . " - Skipping...");
             return;
         }
         if (empty($state['saml:sp:State']['saml:AuthenticatingAuthority'])) {
-            SimpleSAML_Logger::debug(
+            Logger::debug(
                 "[authnauthority] process: 'saml:AuthenticatingAuthority' not available - Skipping...");
             return;
         }
         $authnauthority = $state['saml:sp:State']['saml:AuthenticatingAuthority'];
-        SimpleSAML_Logger::debug(
+        Logger::debug(
             "[authnauthority] process: 'saml:AuthenticatingAuthority'="
                 . var_export($authnauthority, true));
         if ($this->replace || empty($state['Attributes'][$this->attribute])) {
