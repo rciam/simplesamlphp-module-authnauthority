@@ -24,9 +24,9 @@ use SimpleSAML\Logger;
  *
  * Example configuration for the authproc filter in global config/config.php
  *
- *    authproc.sp = array(
+ *    authproc.sp = [
  *       ...
- *       '20' => array(
+ *       '20' => [
  *            'class' => 'authnauthority:AuthnAuthority',
  *            // Uncomment to change the default attribute name
  *            //'attribute' => 'authnAuthority',
@@ -34,8 +34,8 @@ use SimpleSAML\Logger;
  *            // change to false to append the AuthenticatingAuthority values
  *            //'replace' => true,
  *            // List of SP entity IDs that should be excluded
- *            //'spBlacklist' => array(),
- *       ),
+ *            //'spBlacklist' => [],
+ *       ],
  *
  * @author Nicolas Liampotis <nliam@grnet.gr>
  */
@@ -46,7 +46,7 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
     private $replace = true;
 
     // List of SP entity IDs that should be excluded from this filter.
-    private $spBlacklist = array();
+    private $spBlacklist = [];
 
     public function __construct($config, $reserved)
     {

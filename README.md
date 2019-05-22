@@ -19,9 +19,9 @@ specification as follows:
 
 Example configuration for the authproc filter in global `config/config.php`:
 
-    authproc.sp = array(
+    authproc.sp = [
       ...
-      '20' => array(
+      '20' => [
         'class' => 'authnauthority:AuthnAuthority',
         // Uncomment to change the default attribute name
         //'attribute' => 'authnAuthority',
@@ -29,8 +29,8 @@ Example configuration for the authproc filter in global `config/config.php`:
         // change to false to append the AuthenticatingAuthority values
         //'replace' => true,
         // List of SP entity IDs that should be excluded
-        //'spBlacklist' => array(),
-      ),
+        //'spBlacklist' => [],
+      ],
 
 ## License
 
