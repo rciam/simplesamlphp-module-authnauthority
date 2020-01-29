@@ -19,18 +19,29 @@ specification as follows:
 
 Example configuration for the authproc filter in global `config/config.php`:
 
-    authproc.sp = array(
-      ...
-      '20' => array(
-        'class' => 'authnauthority:AuthnAuthority',
-        // Uncomment to change the default attribute name
-        //'attribute' => 'authnAuthority',
-        // By default we replace the existing attribute value (if any);
-        // change to false to append the AuthenticatingAuthority values
-        //'replace' => true,
-        // List of SP entity IDs that should be excluded
-        //'spBlacklist' => array(),
-      ),
+```php
+authproc.sp = array(
+  ...
+  '20' => array(
+      'class' => 'authnauthority:AuthnAuthority',
+      // Uncomment to change the default attribute name
+      //'attribute' => 'authnAuthority',
+      // By default we replace the existing attribute value (if any);
+      // change to false to append the AuthenticatingAuthority values
+      //'replace' => true,
+      // Optional list of SP entity IDs that should be excluded
+      //'spBlacklist' => array(),
+  ),
+),
+```
+
+## Compatibility matrix
+
+This table matches the module version with the supported SimpleSAMLphp version.
+
+| Module |  SimpleSAMLphp |
+|:------:|:--------------:|
+| v1.0   | v1.14          |
 
 ## License
 
