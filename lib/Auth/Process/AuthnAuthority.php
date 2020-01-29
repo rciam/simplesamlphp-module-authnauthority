@@ -106,7 +106,7 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
                 . "['entityid']=" . var_export($authnauthority, true));
         }
         if ($this->replace || empty($state['Attributes'][$this->attribute])) {
-            $state['Attributes'][$this->attribute] = $authnauthority;
+            $state['Attributes'][$this->attribute] = [$authnauthority];
         } else {
             $state['Attributes'][$this->attribute] = array_merge(
                 $state['Attributes'][$this->attribute],
