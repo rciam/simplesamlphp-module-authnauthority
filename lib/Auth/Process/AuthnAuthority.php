@@ -88,23 +88,23 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
     {
         assert('is_array($state)');
 
-        if (!empty($state['saml:sp:State']['SPMetadata']['entityid'])
-            && in_array($state['saml:sp:State']['SPMetadata']['entityid'], $this->spBlacklist, true)) {
+        if (!empty($state['SPMetadata']['entityid'])
+            && in_array($state['SPMetadata']['entityid'], $this->spBlacklist, true)) {
             Logger::debug(
                 "[authnauthority] process: Blacklisted SP "
-                . var_export($state['saml:sp:State']['SPMetadata']['entityid'], true)
+                . var_export($state['SPMetadata']['entityid'], true)
                 . " - Skipping...");
             return;
         }
-        if (empty($state['saml:sp:State']['saml:AuthenticatingAuthority'])) {
-            Logger::debug(
-                "[authnauthority] process: 'saml:AuthenticatingAuthority' not available - Skipping...");
-            return;
-        }
-        $authnauthority = $state['saml:sp:State']['saml:AuthenticatingAuthority'];
-        Logger::debug(
-            "[authnauthority] process: 'saml:AuthenticatingAuthority'="
+        if (!empty($state['saml:sp:IdP'])) {
+            $authnauthority = $state['saml:sp:IdP'];
+            Logger::debug("[authnauthority] process: state['saml:sp:IdP']="
                 . var_export($authnauthority, true));
+        } else {
+            $authnauthority = $state['Source']['entityid'];
+            Logger::debug("[authnauthority] process: state['Source']"
+                . "['entityid']=" . var_export($authnauthority, true));
+        }
         if ($this->replace || empty($state['Attributes'][$this->attribute])) {
             $state['Attributes'][$this->attribute] = $authnauthority;
         } else {
@@ -113,5 +113,8 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
                 $authnauthority
             );
         }
+        Logger::debug("[authnauthority] process: updated state['Attributes']"
+            . "['" . $this->attribute . "']="
+            . var_export($state['Attributes'][$this->attribute], true));
     }
 }
