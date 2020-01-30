@@ -2,6 +2,7 @@
 
 namespace SimpleSAML\Module\authnauthority\Auth\Process;
 
+use SimpleSAML\Error;
 use SimpleSAML\Logger;
 
 /**
@@ -57,7 +58,7 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
             if (!is_string($config['attribute'])) {
                 Logger::error(
                     "[authnauthority] Configuration error: 'attribute' not a string literal");
-                throw new \Exception(
+                throw new Error\Exception(
                     "authnauthority configuration error: 'attribute' not a string literal");
             }
             $this->attribute = $config['attribute']; 
@@ -67,7 +68,7 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
             if (!is_bool($config['replace'])) {
                 Logger::error(
                     "[authnauthority] Configuration error: 'replace' not a boolean");
-                throw new \Exception(
+                throw new Error\Exception(
                     "authnauthority configuration error: 'replace' not a boolean");
             }
             $this->replace = $config['replace']; 
@@ -77,7 +78,7 @@ class AuthnAuthority extends \SimpleSAML\Auth\ProcessingFilter
             if (!is_array($config['spBlacklist'])) {
                 Logger::error(
                     "[authnauthority] Configuration error: 'spBlacklist' not an array");
-                throw new \Exception(
+                throw new Error\Exception(
                     "authnauthority configuration error: 'spBlacklist' not an array");
             }
             $this->spBlacklist = $config['spBlacklist'];
